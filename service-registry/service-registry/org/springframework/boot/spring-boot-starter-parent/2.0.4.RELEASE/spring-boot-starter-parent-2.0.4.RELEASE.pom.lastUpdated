@@ -1,0 +1,4 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Sun Aug 26 14:15:54 BST 2018
+719918f86e8f4038948353ca5dfc05a86788e861@default-sds-nexus-http\://ec2-52-31-188-190.eu-west-1.compute.amazonaws.com\:8081/nexus/content/groups/private/.lastUpdated=1535289354982
+http\://ec2-52-31-188-190.eu-west-1.compute.amazonaws.com\:8081/nexus/content/groups/private/.error=Could not transfer artifact org.springframework.boot\:spring-boot-starter-parent\:pom\:2.0.4.RELEASE from/to sds-nexus (http\://ec2-52-31-188-190.eu-west-1.compute.amazonaws.com\:8081/nexus/content/groups/private)\: Connect to ec2-52-31-188-190.eu-west-1.compute.amazonaws.com\:8081 [ec2-52-31-188-190.eu-west-1.compute.amazonaws.com/52.31.188.190] failed\: Connection timed out\: connect

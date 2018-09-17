@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Tell Me - Take, Organize and Share Notes</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/custom.css">
+<!--<script src="js/lib/jquery.min.js"></script>
+<script src="js/lib/popper.min.js"></script>
+ <script src="js/lib/bootstrap.min.js"></script>-->
+<script src="js/lib/angular.min.js"></script> 
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container" ng-app="myApp" ng-init="isLoggedIn=false;userLoggedIn='guest';actionNote='guest'">
+		<div class="row">
+			<div class="col text-white" style="background-color: lightblue;">
+				<h2>TELL ME</h2>
+				<p>The Project on Learning Technology</p>
+			</div>
+			<div class="col text-secondary float-right" style="background-color: lightblue;" ng-controller="loginCtrl" ng-if="!isLoggedIn">
+				<table>
+					<tr>
+						<td valign="top">
+							<div class="form-group">
+								<label for="email">Email address:</label> 
+								<input type="email" class="form-control" ng-model="email" required>
+							</div>
+						</td>
+						<td valign="top">
+							<div class="form-group">
+								<label for="pwd">Password:</label> 
+								<input type="password" class="form-control" ng-model="pwd" required>
+							</div> 
+							<a href="#demo" data-toggle="modal" data-target="#myModal"> Forgot Password </a>
+						</td>
+						<td valign="middle">
+							<button type="submit" class="btn btn-primary" ng-click="login()">login</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="col text-white oat-right"
+				style="background-color: lightblue;" ng-if="isLoggedIn">
+				<h3 align="right">Welcome {{userLoggedIn.alias}}
+				<br/>
+				<a href="#"><small>Log out</small></a>
+				</h3>
+			</div>
+		</div>
+		<div class="row" ng-if="!isLoggedIn" >
+			<div class="col text-secondary" style="background-color: lavender;  min-height: 500px" ng-controller="noteCtrl" >
+				<h2>Public Notes</h2>
+				<p>
+					<strong>Notes:</strong> The <strong> short notes</strong> for
+					public reference.
+				</p>
+				<div class="panel-group" id="accordion">
+					<div class="panel panel-default"  ng-repeat="note in notes track by $index">
+						<div class="panel-heading" ng-click="accordion.current = note.title">
+							<h4 class="panel-title">
+								{{note.title}}
+							</h4>
+						</div>
+						<div class="panel-collapse" ng-show="accordion.current == note.title">
+							<div class="panel-body">{{note.desc}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col" style="background-color: lavender;"
+				ng-controller="userCtrl">
+				<h3>Create a new account</h3>
+				<p>It's free and always will be.</p>
+				<span class="error_msg">{{errorMessage}}</span> <span
+					class="success_msg">{{message}}</span>
+				<form>
+					<div class="form-group">
+						<label for="alias">Alias:</label> <input type="text"
+							class="form-control" ng-model="alias" required>
+					</div>
+					<div class="form-group">
+						<label for="signUpMail">Email:</label> <input type="email"
+							class="form-control" ng-model="signUpMail" required>
+					</div>
+					<div class="form-group">
+						<label for="signUpPwd">Password:</label> <input type="password"
+							class="form-control" ng-model="signUpPwd" required>
+					</div>
+					<div class="form-group">
+						<label for="signUpConfirmPwd">Confirm Password:</label> <input
+							type="password" class="form-control" ng-model="signUpConfirmPwd"
+							required>
+					</div>
+					<button type="submit" class="btn btn-primary" ng-click="addUser()">
+						Sign up</button>
+				</form>
+			</div>
+		</div>
+		<div class="row" ng-if="isLoggedIn" style="background-color: silver;">
+			<ul class="nav nav-pills">
+				<li><a href="#">Public</a></li>
+				<li class="active"><a href="#">Private</a></li>
+				<li><a href="#">Session</a></li>
+				<li><a href="#">New Channel</a></li>
+			</ul>
+		</div>
+		<div class="row" ng-if="isLoggedIn" ng-controller="noteCtrl">
+			
+			<div class="col text-secondary" style="background-color: lavender;" ng-init="mainNote='rootNote'">
+				
+				
+				<!-- <button type="submit" class="btn btn-primary float-right" ></button> -->
+				<h3>Note 
+					<small>
+						<span class="glyphicon glyphicon-arrow-left float-right" aria-hidden="true" ng-click="stepInToNote(mainNote.parentId);"></span>
+						<span class="float-right" aria-hidden="true">&nbsp;&nbsp;</span> 
+						<span class="glyphicon glyphicon-search float-right" aria-hidden="true" ng-click="alert('Search Modal Pops up here');"></span>
+						<span class="float-right" aria-hidden="true">&nbsp;&nbsp;</span> 
+						<span class="glyphicon glyphicon-download float-right" aria-hidden="true" ng-click="alert('Search Modal Pops up here');"></span>
+					</small>
+				</h3>
+				<div class="form-group">
+					<label for="title">Title:</label> 
+					<input type="text" class="form-control" ng-model="mainNote.title">
+				</div>
+				<div class="form-group">
+					<label for="notes">Notes:</label>
+					<textarea class="form-control" rows="15">{{mainNote.desc}}</textarea>
+				</div>
+				<!-- <button type="button" class="btn btn-info">Submit</button> -->
+
+			</div>
+			<div class="col text-secondary" style="background-color: silver;">
+				<h3>Questions  
+					<small>
+						<button type="button" class="btn btn-info float-right" data-toggle="collapse" data-target="#addQuestionForm">
+							<span class="glyphicon glyphicon-plus float-right" aria-hidden="true">
+							</span>
+						</button>
+					</small> 
+				</h3>
+				<div id="addQuestionForm" class="collapse">
+					<div class="form-group">
+						<label for="addQuestionTxt">Title:</label> 
+						<input type="text" class="form-control" ng-model="addQuestionTxt">
+					</div>
+					<button type="submit" class="btn btn-primary" ng-click="addQuestion()">Add</button>
+					<button type="button" class="btn btn-info float-right" data-toggle="collapse" data-target="#addQuestionForm">
+						<span class="glyphicon glyphicon-minus float-right" aria-hidden="true">
+						</span>
+					</button>
+				</div>
+				<br>
+				<div class="panel-group" id="accordion">
+					<div class="panel panel-default"  ng-repeat="quest in questions track by $index">
+						<div class="panel-heading" ng-click="accordion.quest = quest.quest.quest">
+							<h4 class="panel-title">
+								{{quest.quest.quest}}
+								<small>
+									<span class="glyphicon glyphicon-pencil float-right" aria-hidden="true" ng-click="alert('Edit Modal Pops up here');"></span>
+									<span class="float-right" aria-hidden="true">&nbsp;&nbsp;</span> 
+									<span class="glyphicon glyphicon-trash float-right" aria-hidden="true" ng-click="alert('Delete confirmation');"></span>
+								</small>
+							</h4>
+						</div>
+						<div class="panel-collapse" ng-show="accordion.quest == quest.quest.quest">
+							<div class="panel-body">
+								<p>Key points,</p>
+								<ul>
+									<li ng-repeat="key in quest.keyPoints">
+										{{key.point}}
+										<span class="glyphicon glyphicon-pencil float-right" aria-hidden="true" ng-click="alert('Edit Modal Pops up here');"></span>
+										<span class="float-right" aria-hidden="true">&nbsp;&nbsp;</span>  
+										<span class="glyphicon glyphicon-trash float-right" aria-hidden="true" ng-click="alert('Delete confirmation');"></span>
+									</li>
+								</ul>
+								<input ng-model="newkeyPoint" type="text"></input>
+								<button ng-click="addKeyPoint(quest.quest.id, newkeyPoint)">Add</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col text-secondary" style="background-color: lavender; min-height: 600px">	
+				<h3>Child Notes  
+					<small>
+						<button type="button" class="btn btn-info float-right" data-toggle="collapse" data-target="#addChildNoteForm">
+							<span class="glyphicon glyphicon-plus float-right" aria-hidden="true">
+							</span>
+						</button>
+					</small> 
+				</h3>
+				<div id="addChildNoteForm" class="collapse">
+					<div class="form-group">
+						<label for="addchildNoteTitle">Title:</label> 
+						<input type="text" class="form-control" ng-model="addchildNoteTitle">
+					</div>
+					<div class="form-group">
+						<label for="addChildNoteDesc">Notes:</label>
+						<textarea class="form-control" ng-model="addChildNoteDesc"></textarea>
+					</div>
+					<button type="submit" class="btn btn-primary" ng-click="addChildNote()">Add</button>
+					<button type="button" class="btn btn-info float-right" data-toggle="collapse" data-target="#addChildNoteForm">
+						<span class="glyphicon glyphicon-minus float-right" aria-hidden="true">
+						</span>
+					</button>
+				</div>
+				<br>
+				<div class="panel-group" id="accordion" >
+					<div class="panel panel-default"  ng-repeat="childNote in childNotes track by $index">
+						<div class="panel-heading" ng-click="accordion.current = childNote.title">
+							<h4 class="panel-title">
+								{{childNote.title}} 
+								<span class="glyphicon glyphicon-trash float-right" aria-hidden="true" ng-click="deleteNote(childNote.id);"></span>
+								<span class="float-right" aria-hidden="true">&nbsp;&nbsp;</span> 
+								<span class="glyphicon glyphicon-arrow-right float-right" aria-hidden="true" ng-click="stepInToNote(childNote.id);"></span>
+							</h4>
+						</div>
+						<div class="panel-collapse" ng-show="accordion.current == childNote.title">
+							<div class="panel-body">{{childNote.desc}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Edit Note -->
+	<div class="modal" id="editNoteModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">Edit Note</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="editchildNoteTitle">Title:</label> 
+						<input type="text" class="form-control" ng-model="editchildNoteTitle">
+					</div>
+					<div class="form-group">
+						<label for="editChildNoteDesc">Notes:</label>
+						<textarea class="form-control" ng-model="editChildNoteDesc"></textarea>
+					</div>
+					
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary" ng-click="editChildNote()">Edit</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- The Modal -->
+	<div class="modal" id="myModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">Modal Heading</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="sendmail">
+							Please enter your email address to send your account.
+						</label> 
+						<input type="email" class="form-control" id="sendmail">
+					</div>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Send Mail</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/app/app.js"></script>
+	<script src="js/app/UserController.js"></script>
+	<script src="js/app/UserService.js"></script>
+	<script src="js/app/LoginController.js"></script>
+	<script src="js/app/LoginService.js"></script>
+	<script src="js/app/NoteController.js"></script>
+	<script src="js/app/NoteService.js"></script>
+</body>
+</html>
+

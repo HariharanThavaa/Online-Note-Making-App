@@ -1,0 +1,35 @@
+server:
+  port: 8000
+
+zuul:
+  ignoredServices: '*'
+  prefix: /api
+  routes:
+    user:
+      path: /user/**
+      serviceId: user-module
+      strip-prefix: false
+    note:
+      path: /note/**
+      serviceId: note-module
+      strip-prefix: false
+    session:
+      path: /session/**
+      serviceId: session-module
+      strip-prefix: false
+    lib:
+      path: /lib/**
+      serviceId: lib-module
+      strip-prefix: false
+
+endpoints:
+  routes:
+    sensitive: false
+  trace:
+    sensitive: false
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/
+      
